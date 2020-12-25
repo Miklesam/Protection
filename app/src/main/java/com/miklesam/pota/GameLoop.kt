@@ -37,16 +37,16 @@ class GameLoop(var game: Game, var surfaceHolder: SurfaceHolder) : Thread() {
             frameCount++
 
             elapsedTime = System.currentTimeMillis() - startTime
-            sleepTime = (updateCount * Companion.UPS_PERIOD - elapsedTime).toLong()
+            sleepTime = (updateCount * UPS_PERIOD - elapsedTime).toLong()
             if (sleepTime > 0) {
                 sleep(sleepTime)
             }
 
-            while (sleepTime < 0 && updateCount < Companion.UPS_MAX - 1) {
+            while (sleepTime < 0 && updateCount < UPS_MAX - 1) {
                 game.updateGame()
                 updateCount++
                 elapsedTime = System.currentTimeMillis() - startTime
-                sleepTime = (updateCount * Companion.UPS_PERIOD - elapsedTime).toLong()
+                sleepTime = (updateCount * UPS_PERIOD - elapsedTime).toLong()
 
             }
 

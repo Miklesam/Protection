@@ -61,12 +61,14 @@ class Game(context: Context?) : SurfaceView(context),
             MotionEvent.ACTION_MOVE -> {
                 if(joystick.IsPressedVal){
                     joystick.setActuator(event.x.toDouble(), event.y.toDouble())
+                    player.run()
                 }
                 return true
             }
             MotionEvent.ACTION_UP->{
                 joystick.IsPressedVal=false
                 joystick.resetActuator()
+                player.stop()
                 return true
             }
 
