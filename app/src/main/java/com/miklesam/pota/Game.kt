@@ -33,7 +33,6 @@ class Game(context: Context?) : SurfaceView(context),
         joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), 500.0, 500.0, joystick)
         creeps = ArrayList<Creep>()
-        //creep = Creep(getContext(), 1000.0, 200.0, player)
         isFocusable = true
     }
 
@@ -90,7 +89,6 @@ class Game(context: Context?) : SurfaceView(context),
         creeps.forEach {
             it.draw(canvas)
         }
-        //creep.draw(canvas)
     }
 
     fun drawUPS(canvas: Canvas) {
