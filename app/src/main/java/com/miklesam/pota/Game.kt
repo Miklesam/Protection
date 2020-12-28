@@ -3,14 +3,11 @@ package com.miklesam.pota
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -25,6 +22,9 @@ class Game(context: Context?) : SurfaceView(context),
     private var player: Player
     private var joystick: Joystick
     private var creeps: ArrayList<Creep>
+    private var spells: ArrayList<Spell>
+    private var joystickPointerId = 0
+    private var numberOfSpellsToCast = 0
 
     init {
         val surfaceHolder = holder
@@ -33,6 +33,7 @@ class Game(context: Context?) : SurfaceView(context),
         joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), 500.0, 500.0, joystick)
         creeps = ArrayList<Creep>()
+        spells = ArrayList<Spell>()
         isFocusable = true
     }
 
@@ -54,11 +55,16 @@ class Game(context: Context?) : SurfaceView(context),
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
+        when (event?.actionMasked) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                if (joystick.IsPressedVal) {
+                    numberOfSpellsToCast++
+                } else if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
+                    joystickPointerId = event.getPointerId(event.actionIndex)
                     joystick.IsPressedVal = true
                     player.run()
+                } else {
+                    numberOfSpellsToCast++
                 }
                 return true
             }
@@ -69,10 +75,12 @@ class Game(context: Context?) : SurfaceView(context),
                 }
                 return true
             }
-            MotionEvent.ACTION_UP -> {
-                joystick.IsPressedVal = false
-                joystick.resetActuator()
-                player.stop()
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                if (joystickPointerId == event.getPointerId(event.actionIndex)) {
+                    joystick.IsPressedVal = false
+                    joystick.resetActuator()
+                    player.stop()
+                }
                 return true
             }
 
@@ -87,6 +95,9 @@ class Game(context: Context?) : SurfaceView(context),
         joystick.draw(canvas)
         player.draw(canvas)
         creeps.forEach {
+            it.draw(canvas)
+        }
+        spells.forEach {
             it.draw(canvas)
         }
     }
@@ -118,11 +129,28 @@ class Game(context: Context?) : SurfaceView(context),
         creeps.forEach {
             it.update()
         }
+        while (numberOfSpellsToCast > 0) {
+            spells.add(Spell(context, player))
+            numberOfSpellsToCast--
+        }
+        spells.forEach {
+            it.update()
+        }
 
         val iterator = creeps.iterator()
         while (iterator.hasNext()) {
-            if (GameObject.isColliding(iterator.next(), player)) {
+            val enemy = iterator.next()
+            if (GameObject.isColliding(enemy, player)) {
                 iterator.remove()
+                continue
+            }
+            val iteratorSpell = spells.iterator()
+            while (iteratorSpell.hasNext()) {
+                if (GameObject.isColliding(iteratorSpell.next(), enemy)) {
+                    iteratorSpell.remove()
+                    iterator.remove()
+
+                }
             }
         }
 

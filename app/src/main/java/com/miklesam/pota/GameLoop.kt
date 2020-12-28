@@ -15,11 +15,9 @@ class GameLoop(var game: Game, var surfaceHolder: SurfaceHolder) : Thread() {
 
     override fun run() {
         super.run()
-        var canvas: Canvas
-
+        var canvas: Canvas? = null
         var updateCount = 0
         var frameCount = 0
-
         var startTime = 0L
         var elapsedTime = 0L
         var sleepTime = 0L
@@ -27,14 +25,25 @@ class GameLoop(var game: Game, var surfaceHolder: SurfaceHolder) : Thread() {
         startTime = System.currentTimeMillis()
 
         while (isRunning) {
-            canvas = surfaceHolder.lockCanvas()
-            synchronized(surfaceHolder) {
-                game.updateGame()
-                updateCount++
-                game.draw(canvas)
+            try {
+                canvas = surfaceHolder.lockCanvas()
+                synchronized(surfaceHolder) {
+                    game.updateGame()
+                    updateCount++
+                    game.draw(canvas)
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            } finally {
+                if (canvas != null) {
+                    try {
+                        surfaceHolder.unlockCanvasAndPost(canvas)
+                        frameCount++
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
-            surfaceHolder.unlockCanvasAndPost(canvas)
-            frameCount++
 
             elapsedTime = System.currentTimeMillis() - startTime
             sleepTime = (updateCount * UPS_PERIOD - elapsedTime).toLong()

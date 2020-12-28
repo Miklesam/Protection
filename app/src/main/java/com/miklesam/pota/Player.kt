@@ -8,7 +8,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 
-class Player(var context: Context, positionX: Double, positionY: Double,var joystic: Joystick) :
+class Player(var context: Context, positionX: Double, positionY: Double, var joystic: Joystick) :
     GameObject(positionX, positionY) {
 
     private val paint: Paint = Paint()
@@ -19,15 +19,21 @@ class Player(var context: Context, positionX: Double, positionY: Double,var joys
         paint.color = color
     }
 
-   override fun draw(canvas: Canvas) {
+    override fun draw(canvas: Canvas) {
         icon?.let { canvas.drawBitmap(it, positionX.toFloat(), positionY.toFloat(), paint) }
     }
 
-   override fun update() {
+    override fun update() {
         velocityX = joystic.acturatorX * MAX_SPEED
         velocityY = joystic.acturatorY * MAX_SPEED
         positionX += velocityX
         positionY += velocityY
+
+        if (velocityX != 0.0 || velocityY != 0.0) {
+            val distance = Utils.getDistanceBetweenPoints(0.0, 0.0, velocityX, velocityY)
+            directionX = velocityX / distance
+            directionY = velocityY / distance
+        }
     }
 
     fun stop() {
