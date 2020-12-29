@@ -11,7 +11,7 @@ class Spell(var context: Context, player: Player) : GameObject(player.positionX,
     private val paint: Paint = Paint()
 
     init {
-        icon = BitmapFactory.decodeResource(context.resources, R.drawable.king1)
+        icon = BitmapFactory.decodeResource(context.resources, R.drawable.spell_wk_stun)
         val color = ContextCompat.getColor(context, R.color.white)
         paint.color = color
         velocityX = player.directionX * MAX_SPEED
@@ -28,7 +28,7 @@ class Spell(var context: Context, player: Player) : GameObject(player.positionX,
     }
 
     companion object {
-        const val SPEED_PIXELS_PER_SECONDS = 800.0
+        const val SPEED_PIXELS_PER_SECONDS = 550.0
         private const val MAX_SPEED = SPEED_PIXELS_PER_SECONDS / GameLoop.UPS_MAX
     }
 
