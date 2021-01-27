@@ -1,5 +1,6 @@
 package com.miklesam.pota
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -8,7 +9,6 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
-import kotlin.collections.ArrayList
 
 
 /**
@@ -21,10 +21,11 @@ class Game(context: Context?) : SurfaceView(context),
     private var gameLoop: GameLoop
     private var player: Player
     private var joystick: Joystick
-    private var creeps: ArrayList<Creep>
-    private var spells: ArrayList<Spell>
+
+    //private var creeps: ArrayList<Creep>
+    //private var spells: ArrayList<Spell>
     private var joystickPointerId = 0
-    private var numberOfSpellsToCast = 0
+    //private var numberOfSpellsToCast = 0
 
     init {
         val surfaceHolder = holder
@@ -32,8 +33,8 @@ class Game(context: Context?) : SurfaceView(context),
         gameLoop = GameLoop(this, surfaceHolder)
         joystick = Joystick(275, 700, 70, 40)
         player = Player(getContext(), 500.0, 500.0, joystick)
-        creeps = ArrayList<Creep>()
-        spells = ArrayList<Spell>()
+        //creeps = ArrayList<Creep>()
+        //spells = ArrayList<Spell>()
         isFocusable = true
     }
 
@@ -58,13 +59,13 @@ class Game(context: Context?) : SurfaceView(context),
         when (event?.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
                 if (joystick.IsPressedVal) {
-                    numberOfSpellsToCast++
+                    //numberOfSpellsToCast++
                 } else if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
                     joystickPointerId = event.getPointerId(event.actionIndex)
                     joystick.IsPressedVal = true
                     player.run()
                 } else {
-                    numberOfSpellsToCast++
+                    //numberOfSpellsToCast++
                 }
                 return true
             }
@@ -88,18 +89,26 @@ class Game(context: Context?) : SurfaceView(context),
         return super.onTouchEvent(event)
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        Log.d("Gameee ", "onLayout: $width")
+        Log.d("Gameee ", "onLayoutH: $height")
+        player.screenWidth = width
+        player.screenHeight = height
+    }
+
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         drawFPS(canvas)
         drawUPS(canvas)
         joystick.draw(canvas)
         player.draw(canvas)
-        creeps.forEach {
+        /*creeps.forEach {
             it.draw(canvas)
         }
         spells.forEach {
             it.draw(canvas)
-        }
+        }*/
     }
 
     fun drawUPS(canvas: Canvas) {
@@ -123,7 +132,7 @@ class Game(context: Context?) : SurfaceView(context),
     fun updateGame() {
         joystick.update()
         player.update()
-        if (Creep.readyToSpawn()) {
+        /*if (Creep.readyToSpawn()) {
             creeps.add(Creep(context, player = player))
         }
         creeps.forEach {
@@ -152,7 +161,7 @@ class Game(context: Context?) : SurfaceView(context),
 
                 }
             }
-        }
+        }*/
 
     }
 

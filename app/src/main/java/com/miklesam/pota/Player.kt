@@ -1,17 +1,24 @@
 package com.miklesam.pota
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.content.ContextCompat
 
-class Player(var context: Context, positionX: Double, positionY: Double, var joystic: Joystick) :
+class Player(
+    var context: Context,
+    positionX: Double,
+    positionY: Double,
+    var joystic: Joystick
+) :
     GameObject(positionX, positionY) {
 
     private val paint: Paint = Paint()
+
+    var screenWidth = 0
+    var screenHeight = 0
 
     init {
         icon = BitmapFactory.decodeResource(context.resources, R.drawable.king1)
@@ -26,8 +33,13 @@ class Player(var context: Context, positionX: Double, positionY: Double, var joy
     override fun update() {
         velocityX = joystic.acturatorX * MAX_SPEED
         velocityY = joystic.acturatorY * MAX_SPEED
-        positionX += velocityX
-        positionY += velocityY
+
+        if (positionX + velocityX < 95 * screenWidth / 100 && positionX + velocityX > 0) {
+            positionX += velocityX
+        }
+        if (positionY + velocityY < 90 * screenHeight / 100 && positionY + velocityY > 0) {
+            positionY += velocityY
+        }
 
         if (velocityX != 0.0 || velocityY != 0.0) {
             val distance = Utils.getDistanceBetweenPoints(0.0, 0.0, velocityX, velocityY)
