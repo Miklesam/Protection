@@ -19,6 +19,7 @@ class Player(
 
     var screenWidth = 0
     var screenHeight = 0
+    var right = true
 
     init {
         icon = BitmapFactory.decodeResource(context.resources, R.drawable.king1)
@@ -33,6 +34,8 @@ class Player(
     override fun update() {
         velocityX = joystic.acturatorX * MAX_SPEED
         velocityY = joystic.acturatorY * MAX_SPEED
+        right = joystic.acturatorX >= 0
+        Log.d("Playyer", "${joystic.acturatorX}")
 
         if (positionX + velocityX < 95 * screenWidth / 100 && positionX + velocityX > 0) {
             positionX += velocityX
@@ -57,28 +60,60 @@ class Player(
     fun run() {
         when (count) {
             0 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king1)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king1)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king1_left)
+                }
             }
             1 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king2)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king2)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king2_left)
+                }
             }
             2 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king3)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king3)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king3_left)
+                }
             }
             3 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king4)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king4)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king4_left)
+                }
             }
             4 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king5)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king5)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king5_left)
+                }
             }
             5 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king6)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king6)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king6_left)
+                }
             }
             6 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king7)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king7)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king7_left)
+                }
             }
             7 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.king8)
+                icon = if (right) {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king8)
+                } else {
+                    BitmapFactory.decodeResource(context.resources, R.drawable.king8_left)
+                }
             }
         }
         if (preCount < 2) {
