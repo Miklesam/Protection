@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 
 class Creep(var context: Context, positionX: Double, positionY: Double, var player: Player) :
     GameObject(positionX, positionY) {
-    constructor(context: Context?, player: Player) : this(context!!,Math.random()*1000,Math.random()*1000,player){
-        this.player=player
+    constructor(context: Context?, player: Player) : this(context!!, 900.0, 500.0, player) {
+        this.player = player
     }
 
     private val paint: Paint = Paint()
@@ -27,24 +27,24 @@ class Creep(var context: Context, positionX: Double, positionY: Double, var play
 
     override fun update() {
         run()
-        val distanceToPlayerX = player.positionX - positionX
-        val distanceToPlayerY = player.positionY - positionY
+        /* val distanceToPlayerX = player.positionX - positionX
+         val distanceToPlayerY = player.positionY - positionY
 
-        val distanceToPlayer = getDistanceBeetwenObjects(this, player)
+         val distanceToPlayer = getDistanceBeetwenObjects(this, player)
 
-        val directionX = distanceToPlayerX / distanceToPlayer
-        val directionY = distanceToPlayerY / distanceToPlayer
+         val directionX = distanceToPlayerX / distanceToPlayer
+         val directionY = distanceToPlayerY / distanceToPlayer
 
-        if (distanceToPlayer > 0) {
-            velocityX = directionX * MAX_SPEED
-            velocityY = directionY * MAX_SPEED
-        } else {
-            velocityX = 0.0
-            velocityY = 0.0
-        }
+         if (distanceToPlayer > 0) {
+             velocityX = directionX * MAX_SPEED
+             velocityY = directionY * MAX_SPEED
+         } else {
+             velocityX = 0.0
+             velocityY = 0.0
+         }
 
-        positionX += velocityX
-        positionY += velocityY
+         positionX += velocityX
+         positionY += velocityY*/
 
     }
 

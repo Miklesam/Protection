@@ -1,9 +1,9 @@
 package com.miklesam.pota
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -22,7 +22,11 @@ class Game(context: Context?) : SurfaceView(context),
     private var player: Player
     private var joystick: Joystick
 
-    //private var creeps: ArrayList<Creep>
+    private var creeps: ArrayList<Creep>
+
+    private var playerRect: Rect
+    private var creepRect: Rect
+
     //private var spells: ArrayList<Spell>
     private var joystickPointerId = 0
     //private var numberOfSpellsToCast = 0
@@ -32,10 +36,16 @@ class Game(context: Context?) : SurfaceView(context),
         surfaceHolder.addCallback(this)
         gameLoop = GameLoop(this, surfaceHolder)
         joystick = Joystick(275, 700, 70, 40)
+
+        creeps = ArrayList<Creep>()
         player = Player(getContext(), 500.0, 500.0, joystick)
-        //creeps = ArrayList<Creep>()
+        val creep = Creep(context, player = player)
+        creeps.add(creep)
         //spells = ArrayList<Spell>()
         isFocusable = true
+
+        playerRect = Rect(500, 500, player.icon!!.width, player.icon!!.height)
+        creepRect = Rect(900, 500, creep.icon!!.width, creep.icon!!.height)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -103,10 +113,10 @@ class Game(context: Context?) : SurfaceView(context),
         drawUPS(canvas)
         joystick.draw(canvas)
         player.draw(canvas)
-        /*creeps.forEach {
+        creeps.forEach {
             it.draw(canvas)
         }
-        spells.forEach {
+        /*spells.forEach {
             it.draw(canvas)
         }*/
     }
@@ -132,36 +142,38 @@ class Game(context: Context?) : SurfaceView(context),
     fun updateGame() {
         joystick.update()
         player.update()
-        /*if (Creep.readyToSpawn()) {
-            creeps.add(Creep(context, player = player))
+        if (playerRect.intersect(creepRect)) {
+            Log.d("GAMEEE", "collide")
         }
+
         creeps.forEach {
             it.update()
         }
-        while (numberOfSpellsToCast > 0) {
-            spells.add(Spell(context, player))
-            numberOfSpellsToCast--
-        }
-        spells.forEach {
-            it.update()
-        }
+        /*
+    while (numberOfSpellsToCast > 0) {
+        spells.add(Spell(context, player))
+        numberOfSpellsToCast--
+    }
+    spells.forEach {
+        it.update()
+    }
 
-        val iterator = creeps.iterator()
-        while (iterator.hasNext()) {
-            val enemy = iterator.next()
-            if (GameObject.isColliding(enemy, player)) {
+    val iterator = creeps.iterator()
+    while (iterator.hasNext()) {
+        val enemy = iterator.next()
+        if (GameObject.isColliding(enemy, player)) {
+            iterator.remove()
+            continue
+        }
+        val iteratorSpell = spells.iterator()
+        while (iteratorSpell.hasNext()) {
+            if (GameObject.isColliding(iteratorSpell.next(), enemy)) {
+                iteratorSpell.remove()
                 iterator.remove()
-                continue
-            }
-            val iteratorSpell = spells.iterator()
-            while (iteratorSpell.hasNext()) {
-                if (GameObject.isColliding(iteratorSpell.next(), enemy)) {
-                    iteratorSpell.remove()
-                    iterator.remove()
 
-                }
             }
-        }*/
+        }
+    }*/
 
     }
 
