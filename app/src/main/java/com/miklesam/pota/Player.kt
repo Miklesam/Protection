@@ -17,10 +17,11 @@ class Player(
     GameObject(positionX, positionY) {
 
     private val paint: Paint = Paint()
-
+    lateinit var rect: Rect
     var screenWidth = 0
     var screenHeight = 0
     var right = true
+
 
     init {
         icon = BitmapFactory.decodeResource(context.resources, R.drawable.king1)
@@ -29,27 +30,24 @@ class Player(
     }
 
     override fun draw(canvas: Canvas) {
-        icon?.let { canvas.drawBitmap(it, positionX.toFloat(), positionY.toFloat(), paint) }
+        icon?.let { canvas.drawBitmap(it, rect.left.toFloat(), rect.top.toFloat(), paint) }
     }
 
+
     override fun update() {
+
         velocityX = joystic.acturatorX * MAX_SPEED
         velocityY = joystic.acturatorY * MAX_SPEED
         right = joystic.acturatorX >= 0
-        Log.d("Playyer", "${joystic.acturatorX}")
 
-        if (positionX + velocityX < 95 * screenWidth / 100 && positionX + velocityX > 0) {
-            positionX += velocityX
-        }
-        if (positionY + velocityY < 90 * screenHeight / 100 && positionY + velocityY > 0) {
-            positionY += velocityY
-        }
 
-        if (velocityX != 0.0 || velocityY != 0.0) {
-            val distance = Utils.getDistanceBetweenPoints(0.0, 0.0, velocityX, velocityY)
-            directionX = velocityX / distance
-            directionY = velocityY / distance
-        }
+        rect.left += velocityX.toInt()
+        rect.right = rect.left + icon!!.width
+
+        rect.top += velocityY.toInt()
+        rect.bottom = rect.top + icon!!.height
+
+
     }
 
     fun stop() {
@@ -129,9 +127,18 @@ class Player(
         }
     }
 
+    fun undoLast() {
+        rect.left -= velocityX.toInt()
+        rect.right = rect.left + icon!!.width
+
+        rect.top -= velocityY.toInt()
+        rect.bottom = rect.top + icon!!.height
+
+    }
+
     companion object {
         const val SPEED_PIXELS_PER_SECONDS = 400.0
-        private const val MAX_SPEED = SPEED_PIXELS_PER_SECONDS / GameLoop.UPS_MAX
+        internal const val MAX_SPEED = SPEED_PIXELS_PER_SECONDS / GameLoop.UPS_MAX
     }
 
 }

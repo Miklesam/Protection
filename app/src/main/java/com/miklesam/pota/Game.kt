@@ -24,9 +24,6 @@ class Game(context: Context?) : SurfaceView(context),
 
     private var creeps: ArrayList<Creep>
 
-    private var playerRect: Rect
-    private var creepRect: Rect
-
     //private var spells: ArrayList<Spell>
     private var joystickPointerId = 0
     //private var numberOfSpellsToCast = 0
@@ -39,13 +36,17 @@ class Game(context: Context?) : SurfaceView(context),
 
         creeps = ArrayList<Creep>()
         player = Player(getContext(), 500.0, 500.0, joystick)
-        val creep = Creep(context, player = player)
+        val playerRect = Rect(500, 500, 500 + player.icon!!.width, 500 + player.icon!!.height)
+        player.rect = playerRect
+        val creep = Creep(context!!)
+        val creepRect = Rect(900, 500, 900 + creep.icon!!.width, 500 + creep.icon!!.height)
+
+        creep.rect = creepRect
         creeps.add(creep)
         //spells = ArrayList<Spell>()
         isFocusable = true
 
-        playerRect = Rect(500, 500, player.icon!!.width, player.icon!!.height)
-        creepRect = Rect(900, 500, creep.icon!!.width, creep.icon!!.height)
+
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -101,8 +102,6 @@ class Game(context: Context?) : SurfaceView(context),
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        Log.d("Gameee ", "onLayout: $width")
-        Log.d("Gameee ", "onLayoutH: $height")
         player.screenWidth = width
         player.screenHeight = height
     }
@@ -141,14 +140,16 @@ class Game(context: Context?) : SurfaceView(context),
 
     fun updateGame() {
         joystick.update()
-        player.update()
-        if (playerRect.intersect(creepRect)) {
-            Log.d("GAMEEE", "collide")
-        }
+        if (CollideDetector().preCollide(player, creeps)) {
+            Log.d("Contaiiins", "contains ")
+            //player.undoLast()
 
-        creeps.forEach {
-            it.update()
+        } else {
+            player.update()
         }
+        /*creeps.forEach {
+            it.update()
+        }*/
         /*
     while (numberOfSpellsToCast > 0) {
         spells.add(Spell(context, player))

@@ -4,18 +4,20 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import androidx.core.content.ContextCompat
 
-class Creep(var context: Context, positionX: Double, positionY: Double, var player: Player) :
+class Creep(var context: Context, positionX: Double, positionY: Double) :
     GameObject(positionX, positionY) {
-    constructor(context: Context?, player: Player) : this(context!!, 900.0, 500.0, player) {
-        this.player = player
+    constructor(context: Context) : this(context, 900.0, 500.0) {
+
     }
 
     private val paint: Paint = Paint()
+    lateinit var rect: Rect
 
     init {
-        icon = BitmapFactory.decodeResource(context.resources, R.drawable.red_walk_1)
+        icon = BitmapFactory.decodeResource(context.resources, R.drawable.creep_small_1)
         val color = ContextCompat.getColor(context, R.color.white)
         paint.color = color
     }
@@ -51,13 +53,13 @@ class Creep(var context: Context, positionX: Double, positionY: Double, var play
     fun run() {
         when (count) {
             0 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.red_walk_1)
+                icon = BitmapFactory.decodeResource(context.resources, R.drawable.creep_small_1)
             }
             1 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.red_walk_2)
+                icon = BitmapFactory.decodeResource(context.resources, R.drawable.creep_small_2)
             }
             2 -> {
-                icon = BitmapFactory.decodeResource(context.resources, R.drawable.red_walk_3)
+                icon = BitmapFactory.decodeResource(context.resources, R.drawable.creep_small_3)
             }
         }
         if (preCount < 2) {
