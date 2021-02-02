@@ -1,9 +1,7 @@
 package com.miklesam.pota
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -24,11 +22,14 @@ class Game(context: Context?) : SurfaceView(context),
 
     private var creeps: ArrayList<Creep>
 
+
     //private var spells: ArrayList<Spell>
     private var joystickPointerId = 0
+    private var iconBG:Bitmap
     //private var numberOfSpellsToCast = 0
 
     init {
+        iconBG = BitmapFactory.decodeResource(context?.resources, R.drawable.green_bg)
         val surfaceHolder = holder
         surfaceHolder.addCallback(this)
         gameLoop = GameLoop(this, surfaceHolder)
@@ -108,6 +109,7 @@ class Game(context: Context?) : SurfaceView(context),
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        canvas.drawBitmap(iconBG,0f,0f,null)
         drawFPS(canvas)
         drawUPS(canvas)
         joystick.draw(canvas)
@@ -115,9 +117,6 @@ class Game(context: Context?) : SurfaceView(context),
         creeps.forEach {
             it.draw(canvas)
         }
-        /*spells.forEach {
-            it.draw(canvas)
-        }*/
     }
 
     fun drawUPS(canvas: Canvas) {

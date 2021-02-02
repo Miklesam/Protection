@@ -1,10 +1,18 @@
 package com.miklesam.pota
 
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
-class GameLoop(var game: Game, var surfaceHolder: SurfaceHolder) : Thread() {
+class GameLoop(
+    var game: Game,
+    var surfaceHolder: SurfaceHolder
+) : Thread() {
     private var isRunning = false
+
     var averageUPS = 0.0
     var averageFPS = 0.0
     fun startLoop() {
@@ -71,7 +79,7 @@ class GameLoop(var game: Game, var surfaceHolder: SurfaceHolder) : Thread() {
     }
 
     companion object {
-        const val UPS_MAX = 30.0
+        const val UPS_MAX = 60.0
         const val UPS_PERIOD = 1E+3 / UPS_MAX
     }
 
