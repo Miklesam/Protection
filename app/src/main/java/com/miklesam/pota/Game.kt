@@ -29,7 +29,7 @@ class Game(context: Context?) : SurfaceView(context),
     //private var numberOfSpellsToCast = 0
 
     init {
-        iconBG = BitmapFactory.decodeResource(context?.resources, R.drawable.green_bg)
+        iconBG = BitmapFactory.decodeResource(context?.resources, R.drawable.bg)
         val surfaceHolder = holder
         surfaceHolder.addCallback(this)
         gameLoop = GameLoop(this, surfaceHolder)

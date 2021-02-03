@@ -40,13 +40,14 @@ class Player(
         velocityY = joystic.acturatorY * MAX_SPEED
         right = joystic.acturatorX >= 0
 
-
-        rect.left += velocityX.toInt()
-        rect.right = rect.left + icon!!.width
-
-        rect.top += velocityY.toInt()
-        rect.bottom = rect.top + icon!!.height
-
+        if (rect.left + velocityX < 95 * screenWidth / 100 && rect.left + velocityX > 0) {
+            rect.left += velocityX.toInt()
+            rect.right = rect.left + icon!!.width
+        }
+        if (rect.top + velocityY < 90 * screenHeight / 100 && rect.top + velocityY > 22* screenHeight/100) {
+            rect.top += velocityY.toInt()
+            rect.bottom = rect.top + icon!!.height
+        }
 
     }
 
