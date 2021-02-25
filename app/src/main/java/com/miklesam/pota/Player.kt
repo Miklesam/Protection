@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.util.Log
 import androidx.core.content.ContextCompat
 
 class Player(
@@ -21,6 +20,7 @@ class Player(
     var screenWidth = 0
     var screenHeight = 0
     var right = true
+    var attacks = false
 
 
     init {
@@ -35,19 +35,23 @@ class Player(
 
 
     override fun update() {
+        if (attacks) {
+            animateEndAttack()
+        } else {
+            velocityX = joystic.acturatorX * MAX_SPEED
+            velocityY = joystic.acturatorY * MAX_SPEED
+            right = joystic.acturatorX >= 0
 
-        velocityX = joystic.acturatorX * MAX_SPEED
-        velocityY = joystic.acturatorY * MAX_SPEED
-        right = joystic.acturatorX >= 0
+            if (rect.left + velocityX < 95 * screenWidth / 100 && rect.left + velocityX > 0) {
+                rect.left += velocityX.toInt()
+                rect.right = rect.left + icon!!.width
+            }
+            if (rect.top + velocityY < 90 * screenHeight / 100 && rect.top + velocityY > 22 * screenHeight / 100) {
+                rect.top += velocityY.toInt()
+                rect.bottom = rect.top + icon!!.height
+            }
+        }
 
-        if (rect.left + velocityX < 95 * screenWidth / 100 && rect.left + velocityX > 0) {
-            rect.left += velocityX.toInt()
-            rect.right = rect.left + icon!!.width
-        }
-        if (rect.top + velocityY < 90 * screenHeight / 100 && rect.top + velocityY > 22* screenHeight/100) {
-            rect.top += velocityY.toInt()
-            rect.bottom = rect.top + icon!!.height
-        }
 
     }
 
@@ -128,13 +132,51 @@ class Player(
         }
     }
 
-    fun undoLast() {
-        rect.left -= velocityX.toInt()
-        rect.right = rect.left + icon!!.width
 
-        rect.top -= velocityY.toInt()
-        rect.bottom = rect.top + icon!!.height
+    fun attack() {
+        icon =
+            BitmapFactory.decodeResource(context.resources, R.drawable.attc_3)
+    }
 
+    fun attcEnd() {
+        attacks = true
+    }
+
+    fun animateEndAttack() {
+        attacks = true
+        when (count) {
+            0 -> {
+                icon =
+                    BitmapFactory.decodeResource(context.resources, R.drawable.attc_5)
+
+            }
+            1 -> {
+                icon =
+                    BitmapFactory.decodeResource(context.resources, R.drawable.attc_6)
+
+            }
+            2 -> {
+                icon =
+                    BitmapFactory.decodeResource(context.resources, R.drawable.attc_7)
+
+            }
+            3 -> {
+                icon =
+                    BitmapFactory.decodeResource(context.resources, R.drawable.attc_1)
+
+            }
+        }
+        if (preCount < 3) {
+            preCount++
+        } else {
+            preCount = 0
+            if (count < 5) {
+                count++
+            } else {
+                count = 0
+                attacks = false
+            }
+        }
     }
 
     companion object {

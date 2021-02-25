@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 
 /**
  * Game manages all objects in the game and is responsible for updating all states and render all
- * objects to the screen
+ * objects to the screenPerform Attack
  */
 class Game(context: Context?) : SurfaceView(context),
     SurfaceHolder.Callback {
@@ -25,11 +25,10 @@ class Game(context: Context?) : SurfaceView(context),
 
     //private var spells: ArrayList<Spell>
     private var joystickPointerId = 0
-    private var iconBG:Bitmap
+    private var iconBG: Bitmap = BitmapFactory.decodeResource(context?.resources, R.drawable.bg)
     //private var numberOfSpellsToCast = 0
 
     init {
-        iconBG = BitmapFactory.decodeResource(context?.resources, R.drawable.bg)
         val surfaceHolder = holder
         surfaceHolder.addCallback(this)
         gameLoop = GameLoop(this, surfaceHolder)
@@ -72,12 +71,15 @@ class Game(context: Context?) : SurfaceView(context),
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
                 if (joystick.IsPressedVal) {
                     //numberOfSpellsToCast++
+                    Log.d("Touch_attack", "onTouchEvent: Perform Attack2")
                 } else if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
                     joystickPointerId = event.getPointerId(event.actionIndex)
                     joystick.IsPressedVal = true
                     player.run()
                 } else {
                     //numberOfSpellsToCast++
+                    player.attack()
+                    Log.d("Touch_attack", "onTouchEvent: Down")
                 }
                 return true
             }
@@ -93,6 +95,8 @@ class Game(context: Context?) : SurfaceView(context),
                     joystick.IsPressedVal = false
                     joystick.resetActuator()
                     player.stop()
+                    player.attcEnd()
+                    Log.d("Touch_attack", "onTouchEvent: Up")
                 }
                 return true
             }

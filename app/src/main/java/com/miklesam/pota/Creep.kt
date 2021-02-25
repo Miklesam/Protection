@@ -12,19 +12,22 @@ class Creep(var context: Context, positionX: Double, positionY: Double) :
     constructor(context: Context) : this(context, 900.0, 500.0) {
 
     }
-
+    private val healthBar: DireHealthBar
     private val paint: Paint = Paint()
     lateinit var rect: Rect
+    var hp = 250f
 
     init {
         icon = BitmapFactory.decodeResource(context.resources, R.drawable.creep_small_1)
         val color = ContextCompat.getColor(context, R.color.white)
+        this.healthBar = DireHealthBar(this, context)
         paint.color = color
     }
 
 
     override fun draw(canvas: Canvas) {
         icon?.let { canvas.drawBitmap(it, positionX.toFloat(), positionY.toFloat(), paint) }
+        healthBar.draw(canvas)
     }
 
     override fun update() {
